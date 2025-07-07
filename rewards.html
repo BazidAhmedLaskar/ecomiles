@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards - EcoMiles</title>
+    <meta name="description" content="Discover your earned badges and road tax deductions from your sustainable transportation journeys.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1><a href="dashboard.html" style="text-decoration: none; color: inherit;">🌱 EcoMiles</a></h1>
+                </div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="journey.html">Add Journey</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="rewards.html">Rewards</a>
+                    <a href="profile.html">Profile</a>
+                    <button id="logoutBtn" class="login-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div style="text-align: center; margin: 40px 0;">
+                <h2 style="color: #333; margin-bottom: 10px;">🎖️ Your Rewards</h2>
+                <p style="color: #666;">Earn badges and road tax deductions through eco-friendly travel!</p>
+            </div>
+
+            <!-- Road Tax Deduction Card -->
+            <div class="tax-info">
+                <h3 style="margin-bottom: 20px;">💰 Road Tax Deduction</h3>
+                <div class="tax-amount" id="taxAmount">₹0</div>
+                <p style="opacity: 0.9; margin-bottom: 0;">You've saved this much on your road tax!</p>
+                <div style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                    <strong>Formula:</strong> ₹1 for every 10 EcoPoints earned
+                </div>
+            </div>
+
+            <!-- Achievement Progress -->
+            <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 40px 0;">
+                <h3 style="text-align: center; color: #333; margin-bottom: 30px;">Achievement Progress</h3>
+                
+                <div id="progressStats" class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-icon">🌱</div>
+                        <div class="stat-value" id="currentPoints">0</div>
+                        <div class="stat-label">Current EcoPoints</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="badgesEarned">0</div>
+                        <div class="stat-label">Badges Earned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="nextBadgePoints">100</div>
+                        <div class="stat-label">Points to Next Badge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges Grid -->
+            <div class="badges-grid" id="badgesContainer">
+                <!-- Badges will be populated by JavaScript -->
+            </div>
+
+            <!-- How It Works -->
+            <div style="background: #f8f9fa; padding: 40px; border-radius: 16px; margin: 40px 0;">
+                <h3 style="text-align: center; color: #333; margin-bottom: 30px;">How Rewards Work</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🚶</div>
+                        <h4 style="color: #28a745; margin-bottom: 10px;">Travel Sustainably</h4>
+                        <p style="color: #666; line-height: 1.6;">Walk, cycle, use public transport, or carpool to earn EcoPoints</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🎖️</div>
+                        <h4 style="color: #28a745; margin-bottom: 10px;">Unlock Badges</h4>
+                        <p style="color: #666; line-height: 1.6;">Reach point milestones to unlock achievement badges</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">💰</div>
+                        <h4 style="color: #28a745; margin-bottom: 10px;">Save on Tax</h4>
+                        <p style="color: #666; line-height: 1.6;">Every 10 points = ₹1 road tax deduction</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 1px solid #dee2e6;">
+                    <p style="color: #666; font-style: italic;">
+                        <strong>Note:</strong> Road tax deductions are simulated for demonstration purposes. 
+                        In a real implementation, this would integrate with government tax systems.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Rewards Logic -->
+    <script>
+        // Badge definitions
+        const badges = [
+            {
+                id: 'eco_starter',
+                name: 'Eco Starter',
+                description: 'Earn your first 100 EcoPoints',
+                icon: '🌱',
+                requiredPoints: 100,
+                taxDeduction: 10
+            },
+            {
+                id: 'green_commuter',
+                name: 'Green Commuter',
+                description: 'Reach 250 EcoPoints',
+                icon: '🚌',
+                requiredPoints: 250,
+                taxDeduction: 25
+            },
+            {
+                id: 'eco_warrior',
+                name: 'Eco Warrior',
+                description: 'Achieve 500 EcoPoints',
+                icon: '⚡',
+                requiredPoints: 500,
+                taxDeduction: 50
+            },
+            {
+                id: 'sustainability_champion',
+                name: 'Sustainability Champion',
+                description: 'Earn 750 EcoPoints',
+                icon: '🌟',
+                requiredPoints: 750,
+                taxDeduction: 75
+            },
+            {
+                id: 'green_hero',
+                name: 'Green Hero',
+                description: 'Reach the milestone of 1000 EcoPoints',
+                icon: '🦸',
+                requiredPoints: 1000,
+                taxDeduction: 100
+            },
+            {
+                id: 'planet_guardian',
+                name: 'Planet Guardian',
+                description: 'Exceptional achievement: 1500 EcoPoints',
+                icon: '🌍',
+                requiredPoints: 1500,
+                taxDeduction: 150
+            },
+            {
+                id: 'eco_legend',
+                name: 'Eco Legend',
+                description: 'Legendary status: 2000 EcoPoints',
+                icon: '👑',
+                requiredPoints: 2000,
+                taxDeduction: 200
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check authentication
+            if (!requireAuth()) {
+                return;
+            }
+            
+            // Setup logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Load rewards data
+            await loadRewardsData();
+        });
+
+        async function loadRewardsData() {
+            try {
+                const user = getCurrentUser();
+                if (!user) return;
+                
+                // Get user data from Firestore
+                const userRef = db.collection('users').doc(user.uid);
+                const userDoc = await userRef.get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const currentPoints = userData.points || 0;
+                    const roadTaxSaved = userData.roadTaxSaved || 0;
+                    
+                    // Update tax deduction display
+                    document.getElementById('taxAmount').textContent = `₹${Math.floor(roadTaxSaved)}`;
+                    
+                    // Update progress stats
+                    updateProgressStats(currentPoints);
+                    
+                    // Update badges
+                    updateBadges(currentPoints);
+                } else {
+                    // Initialize with zero values
+                    updateProgressStats(0);
+                    updateBadges(0);
+                }
+                
+            } catch (error) {
+                console.error('Error loading rewards data:', error);
+                // Show error state
+                document.getElementById('badgesContainer').innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #721c24; background: #f8d7da; border-radius: 8px;">
+                        Unable to load rewards. Please try refreshing the page.
+                    </div>
+                `;
+            }
+        }
+
+        function updateProgressStats(currentPoints) {
+            document.getElementById('currentPoints').textContent = currentPoints.toLocaleString();
+            
+            // Calculate badges earned
+            const badgesEarned = badges.filter(badge => currentPoints >= badge.requiredPoints).length;
+            document.getElementById('badgesEarned').textContent = badgesEarned;
+            
+            // Calculate points to next badge
+            const nextBadge = badges.find(badge => currentPoints < badge.requiredPoints);
+            const pointsToNext = nextBadge ? nextBadge.requiredPoints - currentPoints : 0;
+            document.getElementById('nextBadgePoints').textContent = pointsToNext > 0 ? pointsToNext : 'Max level!';
+        }
+
+        function updateBadges(currentPoints) {
+            const badgesContainer = document.getElementById('badgesContainer');
+            let badgesHtml = '';
+            
+            badges.forEach(badge => {
+                const isUnlocked = currentPoints >= badge.requiredPoints;
+                const progress = Math.min((currentPoints / badge.requiredPoints) * 100, 100);
+                
+                badgesHtml += `
+                    <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-title">${badge.name}</div>
+                        <div class="badge-requirement">${badge.description}</div>
+                        
+                        ${!isUnlocked ? `
+                            <div style="margin: 15px 0;">
+                                <div style="background: #e9ecef; height: 8px; border-radius: 4px; overflow: hidden;">
+                                    <div style="background: #28a745; height: 100%; width: ${progress}%; transition: width 0.3s;"></div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                    ${currentPoints}/${badge.requiredPoints} points
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="badge-status ${isUnlocked ? 'unlocked' : 'locked'}">
+                            ${isUnlocked ? '✅ Unlocked' : '🔒 Locked'}
+                        </div>
+                        
+                        ${isUnlocked ? `
+                            <div style="margin-top: 10px; font-size: 0.9rem; color: #28a745; font-weight: 600;">
+                                Tax Deduction: ₹${badge.taxDeduction}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            badgesContainer.innerHTML = badgesHtml;
+        }
+    </script>
+</body>
+</html>

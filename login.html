@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EcoMiles</title>
+    <meta name="description" content="Sign in to EcoMiles with your Google account to start tracking your sustainable transportation journeys.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1><a href="index.html" style="text-decoration: none; color: inherit;">🌱 EcoMiles</a></h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="how-it-works.html">How it Works</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <div class="login-box">
+                <h2>Welcome to EcoMiles</h2>
+                <p>Sign in with your Google account to start tracking your eco-friendly journeys and earning rewards.</p>
+                
+                <button id="googleSignInBtn" class="google-btn">
+                    <span>🔐</span>
+                    Sign in with Google
+                </button>
+                
+                <div id="loginError" class="error-message hidden" style="margin-top: 20px; padding: 15px; background: #f8d7da; color: #721c24; border-radius: 6px;"></div>
+                
+                <div id="loginStatus" class="login-status hidden" style="margin-top: 20px; padding: 15px; background: #d4edda; color: #155724; border-radius: 6px;">
+                    Signing you in...
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e9ecef;">
+                    <p style="color: #666; font-size: 0.9rem;">
+                        By signing in, you agree to our terms of service and privacy policy.
+                        Your data is securely stored and only used to provide EcoMiles services.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Login Logic -->
+    <script src="js/login.js"></script>
+</body>
+</html>

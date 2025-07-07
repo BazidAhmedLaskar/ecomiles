@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Journey - EcoMiles</title>
+    <meta name="description" content="Log your eco-friendly transportation journeys and earn EcoPoints for sustainable travel choices.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1><a href="dashboard.html" style="text-decoration: none; color: inherit;">🌱 EcoMiles</a></h1>
+                </div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="journey.html">Add Journey</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="rewards.html">Rewards</a>
+                    <a href="profile.html">Profile</a>
+                    <button id="logoutBtn" class="login-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2 style="text-align: center; margin: 40px 0; color: #333;">Add Your Journey</h2>
+            
+            <!-- Method Selection -->
+            <div class="form-container">
+                <div class="method-selector" style="margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 20px; color: #333;">How would you like to track this journey?</h3>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <button id="manualModeBtn" class="btn-primary" style="flex: 1; min-width: 200px;">
+                            📝 Manual Entry
+                        </button>
+                        <button id="gpsModeBtn" class="btn-secondary" style="flex: 1; min-width: 200px;">
+                            📍 GPS Tracking
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Manual Entry Form -->
+                <div id="manualForm" class="tracking-form">
+                    <h3 style="margin-bottom: 20px; color: #28a745;">Manual Journey Entry</h3>
+                    <form id="manualJourneyForm">
+                        <div class="form-group">
+                            <label for="transportMode">Transportation Mode</label>
+                            <select id="transportMode" required>
+                                <option value="">Select your mode of transport</option>
+                                <option value="walk">🚶 Walking (10 points/km)</option>
+                                <option value="cycle">🚴 Cycling (8 points/km)</option>
+                                <option value="bus">🚌 Bus/Public Transport (5 points/km)</option>
+                                <option value="carpool">🚘 Carpool (3 points/km)</option>
+                                <option value="train">🚆 Train (5 points/km)</option>
+                                <option value="metro">🚇 Metro (5 points/km)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="distance">Distance (in kilometers)</label>
+                            <input type="number" id="distance" min="0.1" max="1000" step="0.1" required 
+                                   placeholder="Enter distance in km">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="journeyNotes">Journey Notes (Optional)</label>
+                            <textarea id="journeyNotes" rows="3" 
+                                      placeholder="Add any notes about your journey..."></textarea>
+                        </div>
+                        
+                        <div id="pointsPreview" class="points-preview" style="display: none; background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #28a745; margin-bottom: 10px;">Journey Summary</h4>
+                            <p id="previewText" style="color: #333;"></p>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" style="width: 100%;">
+                            Add Journey
+                        </button>
+                    </form>
+                </div>
+
+                <!-- GPS Tracking Form -->
+                <div id="gpsForm" class="tracking-form" style="display: none;">
+                    <h3 style="margin-bottom: 20px; color: #28a745;">GPS Journey Tracking</h3>
+                    
+                    <div class="gps-controls">
+                        <div id="gpsStatus" class="gps-status">
+                            <strong>GPS Status:</strong> <span id="gpsStatusText">Ready to start</span>
+                        </div>
+                        
+                        <div id="gpsDistance" class="distance-display" style="display: none;">
+                            <span id="distanceValue">0.0</span> km
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                            <button id="startGpsBtn" class="btn-primary">
+                                ▶️ Start Journey
+                            </button>
+                            <button id="stopGpsBtn" class="btn-secondary" style="display: none;">
+                                ⏹️ Stop Journey
+                            </button>
+                        </div>
+                        
+                        <div id="gpsError" class="error-message" style="display: none; margin-top: 15px; padding: 15px; background: #f8d7da; color: #721c24; border-radius: 6px;"></div>
+                    </div>
+                    
+                    <!-- GPS Journey Completion Form -->
+                    <div id="gpsCompletionForm" style="display: none;">
+                        <hr style="margin: 30px 0; border: 1px solid #e9ecef;">
+                        <h4 style="color: #333; margin-bottom: 20px;">Complete Your Journey</h4>
+                        
+                        <div class="form-group">
+                            <label for="gpsTransportMode">What mode of transport did you use?</label>
+                            <select id="gpsTransportMode" required>
+                                <option value="">Select your mode of transport</option>
+                                <option value="walk">🚶 Walking (10 points/km)</option>
+                                <option value="cycle">🚴 Cycling (8 points/km)</option>
+                                <option value="bus">🚌 Bus/Public Transport (5 points/km)</option>
+                                <option value="carpool">🚘 Carpool (3 points/km)</option>
+                                <option value="train">🚆 Train (5 points/km)</option>
+                                <option value="metro">🚇 Metro (5 points/km)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gpsJourneyNotes">Journey Notes (Optional)</label>
+                            <textarea id="gpsJourneyNotes" rows="3" 
+                                      placeholder="Add any notes about your journey..."></textarea>
+                        </div>
+                        
+                        <div id="gpsPointsPreview" class="points-preview" style="display: none; background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #28a745; margin-bottom: 10px;">Journey Summary</h4>
+                            <p id="gpsPreviewText" style="color: #333;"></p>
+                        </div>
+                        
+                        <button id="submitGpsJourney" class="btn-primary" style="width: 100%;">
+                            Save GPS Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Journey Logic -->
+    <script src="js/journey.js"></script>
+</body>
+</html>

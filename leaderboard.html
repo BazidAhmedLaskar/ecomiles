@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - EcoMiles</title>
+    <meta name="description" content="View the EcoMiles leaderboard and see how you rank among other sustainable transportation champions.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1><a href="dashboard.html" style="text-decoration: none; color: inherit;">🌱 EcoMiles</a></h1>
+                </div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="journey.html">Add Journey</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="rewards.html">Rewards</a>
+                    <a href="profile.html">Profile</a>
+                    <button id="logoutBtn" class="login-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div style="text-align: center; margin: 40px 0;">
+                <h2 style="color: #333; margin-bottom: 10px;">🏆 EcoMiles Leaderboard</h2>
+                <p style="color: #666;">See how you rank among other eco-warriors!</p>
+            </div>
+
+            <!-- User's Current Rank -->
+            <div id="userRankCard" class="stat-card" style="margin-bottom: 40px; display: none;">
+                <h3 style="color: #28a745; margin-bottom: 15px;">Your Current Rank</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 2rem; font-weight: 700; color: #333;" id="userRankPosition">#--</div>
+                        <div style="color: #666;" id="userRankName">--</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;" id="userRankPoints">-- points</div>
+                        <div style="color: #666;" id="userRankDistance">-- km</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 3 Podium -->
+            <div id="podium" class="podium-container" style="display: none; margin: 40px 0;">
+                <div style="display: flex; justify-content: center; align-items: end; gap: 20px; flex-wrap: wrap;">
+                    <!-- 2nd Place -->
+                    <div id="place2" class="podium-place" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; min-width: 200px; order: 1;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🥈</div>
+                        <div style="font-weight: 700; color: #333; margin-bottom: 5px;" class="podium-name">2nd Place</div>
+                        <div style="color: #666; font-size: 0.9rem;" class="podium-points">-- points</div>
+                    </div>
+                    
+                    <!-- 1st Place -->
+                    <div id="place1" class="podium-place" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 30px rgba(0,0,0,0.2); text-align: center; min-width: 200px; order: 2;">
+                        <div style="font-size: 4rem; margin-bottom: 10px;">🥇</div>
+                        <div style="font-weight: 700; margin-bottom: 5px;" class="podium-name">1st Place</div>
+                        <div style="opacity: 0.9; font-size: 0.9rem;" class="podium-points">-- points</div>
+                    </div>
+                    
+                    <!-- 3rd Place -->
+                    <div id="place3" class="podium-place" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; min-width: 200px; order: 3;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🥉</div>
+                        <div style="font-weight: 700; color: #333; margin-bottom: 5px;" class="podium-name">3rd Place</div>
+                        <div style="color: #666; font-size: 0.9rem;" class="podium-points">-- points</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Leaderboard Table -->
+            <div class="leaderboard-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>EcoPoints</th>
+                            <th>Distance</th>
+                            <th>CO₂ Saved</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
+                                Loading leaderboard...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Loading and Error States -->
+            <div id="loadingMessage" style="text-align: center; padding: 40px; color: #666;">
+                Loading leaderboard data...
+            </div>
+
+            <div id="errorMessage" style="display: none; text-align: center; padding: 40px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 20px 0;">
+                Unable to load leaderboard. Please try refreshing the page.
+            </div>
+
+            <!-- Info Section -->
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 12px; margin: 40px 0; text-align: center;">
+                <h3 style="color: #333; margin-bottom: 20px;">How to Climb the Leaderboard</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🚶</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Walk More</div>
+                        <div style="color: #666; font-size: 0.9rem;">10 points per km</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🚴</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Cycle Often</div>
+                        <div style="color: #666; font-size: 0.9rem;">8 points per km</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🚌</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Use Public Transport</div>
+                        <div style="color: #666; font-size: 0.9rem;">5 points per km</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🚘</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Carpool</div>
+                        <div style="color: #666; font-size: 0.9rem;">3 points per km</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Leaderboard Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check authentication
+            if (!requireAuth()) {
+                return;
+            }
+            
+            // Setup logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Load leaderboard
+            await loadLeaderboard();
+        });
+
+        async function loadLeaderboard() {
+            const loadingDiv = document.getElementById('loadingMessage');
+            const errorDiv = document.getElementById('errorMessage');
+            const leaderboardBody = document.getElementById('leaderboardBody');
+            const currentUser = getCurrentUser();
+            
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                
+                // Fetch top users by points
+                const usersRef = db.collection('users')
+                    .orderBy('points', 'desc')
+                    .limit(50);
+                
+                const snapshot = await usersRef.get();
+                
+                if (snapshot.empty) {
+                    leaderboardBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
+                                No users found. Be the first to add a journey!
+                            </td>
+                        </tr>
+                    `;
+                    loadingDiv.style.display = 'none';
+                    return;
+                }
+                
+                const users = [];
+                let currentUserRank = null;
+                let currentUserData = null;
+                
+                snapshot.forEach((doc, index) => {
+                    const userData = doc.data();
+                    const userInfo = {
+                        uid: doc.id,
+                        name: userData.name || 'Unknown User',
+                        points: userData.points || 0,
+                        totalDistance: userData.totalDistance || 0,
+                        rank: index + 1
+                    };
+                    
+                    users.push(userInfo);
+                    
+                    // Check if this is the current user
+                    if (currentUser && doc.id === currentUser.uid) {
+                        currentUserRank = index + 1;
+                        currentUserData = userInfo;
+                    }
+                });
+                
+                // Update podium (top 3)
+                updatePodium(users.slice(0, 3));
+                
+                // Update user rank card
+                if (currentUserData) {
+                    updateUserRankCard(currentUserData);
+                }
+                
+                // Update leaderboard table
+                updateLeaderboardTable(users, currentUser?.uid);
+                
+                loadingDiv.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                loadingDiv.style.display = 'none';
+                errorDiv.style.display = 'block';
+                
+                leaderboardBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: #721c24;">
+                            Error loading leaderboard. Please try again.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function updatePodium(topUsers) {
+            const podium = document.getElementById('podium');
+            
+            if (topUsers.length > 0) {
+                podium.style.display = 'block';
+                
+                // Update each podium position
+                for (let i = 0; i < 3; i++) {
+                    const place = document.getElementById(`place${i + 1}`);
+                    const nameEl = place.querySelector('.podium-name');
+                    const pointsEl = place.querySelector('.podium-points');
+                    
+                    if (topUsers[i]) {
+                        nameEl.textContent = topUsers[i].name;
+                        pointsEl.textContent = `${topUsers[i].points.toLocaleString()} points`;
+                    } else {
+                        nameEl.textContent = `${getOrdinal(i + 1)} Place`;
+                        pointsEl.textContent = '-- points';
+                    }
+                }
+            }
+        }
+
+        function updateUserRankCard(userData) {
+            const userRankCard = document.getElementById('userRankCard');
+            const positionEl = document.getElementById('userRankPosition');
+            const nameEl = document.getElementById('userRankName');
+            const pointsEl = document.getElementById('userRankPoints');
+            const distanceEl = document.getElementById('userRankDistance');
+            
+            positionEl.textContent = `#${userData.rank}`;
+            nameEl.textContent = userData.name;
+            pointsEl.textContent = `${userData.points.toLocaleString()} points`;
+            distanceEl.textContent = `${userData.totalDistance.toFixed(1)} km`;
+            
+            userRankCard.style.display = 'block';
+        }
+
+        function updateLeaderboardTable(users, currentUserId) {
+            const leaderboardBody = document.getElementById('leaderboardBody');
+            let tableHtml = '';
+            
+            users.forEach((user, index) => {
+                const isCurrentUser = currentUserId && user.uid === currentUserId;
+                const co2Saved = (user.totalDistance * 0.21).toFixed(1);
+                const rankClass = index < 3 ? ['gold', 'silver', 'bronze'][index] : '';
+                
+                tableHtml += `
+                    <tr ${isCurrentUser ? 'class="current-user"' : ''}>
+                        <td>
+                            <span class="rank ${rankClass}">${user.rank}</span>
+                        </td>
+                        <td>
+                            <div style="font-weight: 600;">${user.name}</div>
+                            ${isCurrentUser ? '<div style="font-size: 0.8rem; color: #28a745;">You</div>' : ''}
+                        </td>
+                        <td>
+                            <strong>${user.points.toLocaleString()}</strong>
+                        </td>
+                        <td>
+                            ${user.totalDistance.toFixed(1)} km
+                        </td>
+                        <td>
+                            ${co2Saved} kg
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            leaderboardBody.innerHTML = tableHtml;
+        }
+
+        function getOrdinal(num) {
+            const ordinals = ['1st', '2nd', '3rd'];
+            return ordinals[num - 1] || `${num}th`;
+        }
+    </script>
+</body>
+</html>
