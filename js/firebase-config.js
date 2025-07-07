@@ -4,9 +4,10 @@ const firebaseConfig = {
   apiKey: "AIzaSyDFJQKYkWywoSprZqOtjqjoYAe7nkGOfEI",
   authDomain: "ecomiles-70c6e.firebaseapp.com",
   projectId: "ecomiles-70c6e",
-  storageBucket: "ecomiles-70c6e.firebasestorage.app",
+  storageBucket: "ecomiles-70c6e.appspot.com", // FIXED this line
   messagingSenderId: "247523942180",
-  appId: "1:247523942180:web:947f664f5de7f0c1759db1"
+  appId: "1:247523942180:web:947f664f5de7f0c1759db1",
+  measurementId: "G-2TP0NK67TX"
 };
 
 // Initialize Firebase
