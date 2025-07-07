@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EcoMiles</title>
+    <meta name="description" content="Track your EcoMiles progress, view your sustainability stats, and manage your eco-friendly transportation journeys.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1><a href="dashboard.html" style="text-decoration: none; color: inherit;">🌱 EcoMiles</a></h1>
+                </div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="journey.html">Add Journey</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="rewards.html">Rewards</a>
+                    <a href="profile.html">Profile</a>
+                    <button id="logoutBtn" class="login-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="dashboard-header">
+            <div class="container">
+                <div class="user-info">
+                    <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                    <div class="welcome-text">
+                        <h2 id="welcomeMessage">Welcome back!</h2>
+                        <p id="userEmail"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-content">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🌱</div>
+                        <div class="stat-value" id="totalPoints">0</div>
+                        <div class="stat-label">Total EcoPoints</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📏</div>
+                        <div class="stat-value" id="totalDistance">0 km</div>
+                        <div class="stat-label">Distance Traveled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🌍</div>
+                        <div class="stat-value" id="co2Saved">0 kg</div>
+                        <div class="stat-label">CO₂ Saved</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="roadTaxSaved">₹0</div>
+                        <div class="stat-label">Road Tax Saved</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Weekly EcoPoints Progress</h3>
+                    <canvas id="weeklyChart" width="400" height="200"></canvas>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="journey.html" class="action-btn">
+                        ➕ Add New Journey
+                    </a>
+                    <a href="leaderboard.html" class="action-btn">
+                        🏆 View Leaderboard
+                    </a>
+                    <a href="rewards.html" class="action-btn">
+                        🎖️ View Rewards
+                    </a>
+                    <a href="profile.html" class="action-btn">
+                        👤 My Profile
+                    </a>
+                </div>
+
+                <div class="recent-journeys" id="recentJourneys">
+                    <h3>Recent Journeys</h3>
+                    <div id="journeysList" class="journeys-list">
+                        <p style="text-align: center; color: #666; padding: 40px;">
+                            No journeys yet. <a href="journey.html">Add your first journey!</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Dashboard Logic -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Profile - EcoMiles</title>
+        <meta
+            name="description"
+            content="View your EcoMiles profile, journey history, and account information."
+        />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="nav-container">
+                    <div class="logo">
+                        <h1>
+                            <a
+                                href="dashboard.html"
+                                style="text-decoration: none; color: inherit"
+                                >🌱 EcoMiles</a
+                            >
+                        </h1>
+                    </div>
+                    <div class="nav-links">
+                        <a href="dashboard.html">Dashboard</a>
+                        <a href="journey.html">Add Journey</a>
+                        <a href="leaderboard.html">Leaderboard</a>
+                        <a href="rewards.html">Rewards</a>
+                        <a href="profile.html">Profile</a>
+                        <button id="logoutBtn" class="login-btn">Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="container">
+                <!-- Profile Header -->
+                <div
+                    style="
+                        background: linear-gradient(
+                            135deg,
+                            #28a745 0%,
+                            #20c997 100%
+                        );
+                        color: white;
+                        padding: 40px;
+                        border-radius: 16px;
+                        margin: 40px 0;
+                        text-align: center;
+                    "
+                >
+                    <div
+                        style="
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 20px;
+                        "
+                    >
+                        <img
+                            id="profileAvatar"
+                            src=""
+                            alt="Profile Picture"
+                            style="
+                                width: 100px;
+                                height: 100px;
+                                border-radius: 50%;
+                                border: 4px solid white;
+                                display: none;
+                            "
+                        />
+                        <div>
+                            <h2 id="profileName" style="margin-bottom: 10px">
+                                Loading...
+                            </h2>
+                            <p
+                                id="profileEmail"
+                                style="opacity: 0.9; margin-bottom: 0"
+                            ></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🌱</div>
+                        <div class="stat-value" id="profilePoints">0</div>
+                        <div class="stat-label">Total EcoPoints</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📏</div>
+                        <div class="stat-value" id="profileDistance">0 km</div>
+                        <div class="stat-label">Distance Traveled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗓️</div>
+                        <div class="stat-value" id="profileJourneys">0</div>
+                        <div class="stat-label">Total Journeys</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🌍</div>
+                        <div class="stat-value" id="profileCO2">0 kg</div>
+                        <div class="stat-label">CO₂ Saved</div>
+                    </div>
+                </div>
+
+                <!-- Journey History -->
+                <div
+                    style="
+                        background: white;
+                        padding: 40px;
+                        border-radius: 16px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                        margin: 40px 0;
+                    "
+                >
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 30px;
+                        "
+                    >
+                        <h3 style="color: #333; margin: 0">Journey History</h3>
+                        <button
+                            id="showAllJourneys"
+                            class="btn-secondary"
+                            style="padding: 8px 16px; font-size: 0.9rem"
+                        >
+                            Show All
+                        </button>
+                    </div>
+
+                    <div id="journeyHistoryContainer">
+                        <div id="journeyHistoryList">
+                            <p
+                                style="
+                                    text-align: center;
+                                    color: #666;
+                                    padding: 40px;
+                                "
+                            >
+                                Loading journey history...
+                            </p>
+                        </div>
+
+                        <div
+                            id="journeyPagination"
+                            style="
+                                display: none;
+                                text-align: center;
+                                margin-top: 30px;
+                            "
+                        >
+                            <button
+                                id="prevPage"
+                                class="btn-secondary"
+                                style="margin: 0 10px"
+                            >
+                                Previous
+                            </button>
+                            <span
+                                id="pageInfo"
+                                style="margin: 0 20px; color: #666"
+                            ></span>
+                            <button
+                                id="nextPage"
+                                class="btn-secondary"
+                                style="margin: 0 10px"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Actions -->
+                <div
+                    style="
+                        background: #f8f9fa;
+                        padding: 40px;
+                        border-radius: 16px;
+                        margin: 40px 0;
+                    "
+                >
+                    <h3
+                        style="
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 30px;
+                        "
+                    >
+                        Account Actions
+                    </h3>
+
+                    <div
+                        style="
+                            display: grid;
+                            grid-template-columns: repeat(
+                                auto-fit,
+                                minmax(250px, 1fr)
+                            );
+                            gap: 20px;
+                        "
+                    >
+                        <button
+                            id="downloadDataBtn"
+                            class="action-btn"
+                            style="background: #17a2b8"
+                        >
+                            📥 Download My Data
+                        </button>
+                        <button
+                            id="clearDataBtn"
+                            class="action-btn"
+                            style="background: #dc3545"
+                        >
+                            🗑️ Clear All Data
+                        </button>
+                        <button
+                            id="logoutBtn2"
+                            class="action-btn"
+                            style="background: #6c757d"
+                        >
+                            🚪 Logout
+                        </button>
+                    </div>
+
+                    <div
+                        style="
+                            text-align: center;
+                            margin-top: 30px;
+                            padding-top: 30px;
+                            border-top: 1px solid #dee2e6;
+                        "
+                    >
+                        <p
+                            style="
+                                color: #666;
+                                font-size: 0.9rem;
+                                margin-bottom: 10px;
+                            "
+                        >
+                            Member since: <span id="memberSince">--</span>
+                        </p>
+                        <p
+                            style="
+                                color: #666;
+                                font-size: 0.9rem;
+                                font-style: italic;
+                            "
+                        >
+                            Your data is securely stored and only used to
+                            provide EcoMiles services.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Firebase Scripts -->
+        <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+
+        <!-- Firebase Configuration -->
+        <script src="js/firebase-config.js"></script>
+
+        <!-- Profile Logic -->
+        <script>
+            let currentPage = 1;
+            const journeysPerPage = 10;
+            let totalJourneys = 0;
+            let allJourneys = [];
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                // Check authentication
+                if (!requireAuth()) {
+                    return;
+                }
+
+                // Setup logout functionality
+                document
+                    .getElementById("logoutBtn")
+                    .addEventListener("click", logout);
+                document
+                    .getElementById("logoutBtn2")
+                    .addEventListener("click", logout);
+
+                // Setup other actions
+                setupProfileActions();
+
+                // Load profile data
+                await loadProfileData();
+            });
+
+            function setupProfileActions() {
+                document
+                    .getElementById("showAllJourneys")
+                    .addEventListener("click", toggleJourneyView);
+                document
+                    .getElementById("downloadDataBtn")
+                    .addEventListener("click", downloadUserData);
+                document
+                    .getElementById("clearDataBtn")
+                    .addEventListener("click", clearUserData);
+                document
+                    .getElementById("prevPage")
+                    .addEventListener("click", () => changePage(-1));
+                document
+                    .getElementById("nextPage")
+                    .addEventListener("click", () => changePage(1));
+            }
+
+            async function loadProfileData() {
+                try {
+                    const user = getCurrentUser();
+                    if (!user) return;
+
+                    // Update profile header
+                    updateProfileHeader(user);
+
+                    // Load user stats from Firestore
+                    const userRef = db.collection("users").doc(user.uid);
+                    const userDoc = await userRef.get();
+
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        updateProfileStats(userData);
+
+                        // Update member since date
+                        if (userData.createdAt) {
+                            const createdDate = userData.createdAt.toDate();
+                            document.getElementById("memberSince").textContent =
+                                createdDate.toLocaleDateString();
+                        }
+                    }
+
+                    // Load journey history
+                    await loadJourneyHistory(user.uid);
+                } catch (error) {
+                    console.error("Error loading profile data:", error);
+                    showError(
+                        "Unable to load profile data. Please try refreshing the page.",
+                    );
+                }
+            }
+
+            function updateProfileHeader(user) {
+                document.getElementById("profileName").textContent =
+                    user.name || "User";
+                document.getElementById("profileEmail").textContent =
+                    user.email || "";
+
+                const avatar = document.getElementById("profileAvatar");
+                if (user.photoURL) {
+                    avatar.src = user.photoURL;
+                    avatar.style.display = "block";
+                }
+            }
+
+            function updateProfileStats(userData) {
+                const points = userData.points || 0;
+                const distance = userData.totalDistance || 0;
+                const co2Saved = (distance * 0.21).toFixed(1);
+
+                document.getElementById("profilePoints").textContent =
+                    points.toLocaleString();
+                document.getElementById("profileDistance").textContent =
+                    `${distance.toFixed(1)} km`;
+                document.getElementById("profileCO2").textContent =
+                    `${co2Saved} kg`;
+            }
+
+            async function loadJourneyHistory(userId, showAll = false) {
+                try {
+                    const journeysRef = db
+                        .collection("journeys")
+                        .where("userId", "==", userId)
+                        .orderBy("timestamp", "desc");
+
+                    const snapshot = await journeysRef.get();
+
+                    allJourneys = [];
+                    snapshot.forEach((doc) => {
+                        allJourneys.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    totalJourneys = allJourneys.length;
+
+                    // Update journey count
+                    document.getElementById("profileJourneys").textContent =
+                        totalJourneys;
+
+                    if (totalJourneys === 0) {
+                        document.getElementById(
+                            "journeyHistoryList",
+                        ).innerHTML = `
+                        <p style="text-align: center; color: #666; padding: 40px;">
+                            No journeys yet. <a href="journey.html">Add your first journey!</a>
+                        </p>
+                    `;
+                        return;
+                    }
+
+                    // Display journeys (paginated or limited)
+                    displayJourneys(showAll);
+                } catch (error) {
+                    console.error("Error loading journey history:", error);
+                    document.getElementById("journeyHistoryList").innerHTML = `
+                    <p style="text-align: center; color: #721c24; padding: 40px;">
+                        Unable to load journey history. Please try again.
+                    </p>
+                `;
+                }
+            }
+
+            function displayJourneys(showAll = false) {
+                const journeysList =
+                    document.getElementById("journeyHistoryList");
+                const pagination = document.getElementById("journeyPagination");
+
+                let journeysToShow;
+
+                if (showAll) {
+                    const startIndex = (currentPage - 1) * journeysPerPage;
+                    const endIndex = startIndex + journeysPerPage;
+                    journeysToShow = allJourneys.slice(startIndex, endIndex);
+
+                    // Update pagination
+                    const totalPages = Math.ceil(
+                        totalJourneys / journeysPerPage,
+                    );
+                    updatePagination(totalPages);
+                    pagination.style.display =
+                        totalPages > 1 ? "block" : "none";
+                } else {
+                    journeysToShow = allJourneys.slice(0, 5);
+                    pagination.style.display = "none";
+                }
+
+                let journeysHtml = "";
+                journeysToShow.forEach((journey) => {
+                    const date = journey.timestamp
+                        ? journey.timestamp.toDate()
+                        : new Date();
+                    const modeEmoji = getModeEmoji(journey.mode);
+
+                    journeysHtml += `
+                    <div style="background: #f8f9fa; padding: 20px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <div style="font-weight: 600; color: #333; margin-bottom: 5px;">
+                                    ${modeEmoji} ${journey.mode.charAt(0).toUpperCase() + journey.mode.slice(1)} Journey
+                                </div>
+                                <div style="color: #666; font-size: 0.9rem;">
+                                    ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                </div>
+                                ${journey.notes ? `<div style="color: #666; font-size: 0.9rem; margin-top: 5px; font-style: italic;">"${journey.notes}"</div>` : ""}
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 700; color: #28a745; font-size: 1.1rem;">
+                                    +${journey.points} points
+                                </div>
+                                <div style="color: #666; font-size: 0.9rem;">
+                                    ${journey.distance.toFixed(1)} km
+                                </div>
+                                <div style="color: #666; font-size: 0.8rem;">
+                                    ${journey.type === "gps" ? "📍 GPS" : "📝 Manual"}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                });
+
+                journeysList.innerHTML = journeysHtml;
+            }
+
+            function getModeEmoji(mode) {
+                const emojiMap = {
+                    walk: "🚶",
+                    cycle: "🚴",
+                    bus: "🚌",
+                    carpool: "🚘",
+                    train: "🚆",
+                    metro: "🚇",
+                };
+                return emojiMap[mode] || "🚶";
+            }
+
+            function toggleJourneyView() {
+                const btn = document.getElementById("showAllJourneys");
+                const isShowingAll = btn.textContent === "Show Less";
+
+                if (isShowingAll) {
+                    btn.textContent = "Show All";
+                    currentPage = 1;
+                    displayJourneys(false);
+                } else {
+                    btn.textContent = "Show Less";
+                    displayJourneys(true);
+                }
+            }
+
+            function updatePagination(totalPages) {
+                const pageInfo = document.getElementById("pageInfo");
+                const prevBtn = document.getElementById("prevPage");
+                const nextBtn = document.getElementById("nextPage");
+
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+            }
+
+            function changePage(direction) {
+                const totalPages = Math.ceil(totalJourneys / journeysPerPage);
+                const newPage = currentPage + direction;
+
+                if (newPage >= 1 && newPage <= totalPages) {
+                    currentPage = newPage;
+                    displayJourneys(true);
+                }
+            }
+
+            async function downloadUserData() {
+                try {
+                    const user = getCurrentUser();
+                    if (!user) return;
+
+                    const userRef = db.collection("users").doc(user.uid);
+                    const userDoc = await userRef.get();
+                    const userData = userDoc.exists ? userDoc.data() : {};
+
+                    const exportData = {
+                        profile: {
+                            name: user.name,
+                            email: user.email,
+                            uid: user.uid,
+                            ...userData,
+                        },
+                        journeys: allJourneys,
+                        exportDate: new Date().toISOString(),
+                    };
+
+                    // Download as JSON file
+                    const dataStr = JSON.stringify(exportData, null, 2);
+                    const dataBlob = new Blob([dataStr], {
+                        type: "application/json",
+                    });
+                    const url = URL.createObjectURL(dataBlob);
+
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `ecomiles-data-${new Date().toISOString().split("T")[0]}.json`;
+                    link.click();
+
+                    URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.error("Error downloading data:", error);
+                    alert("Failed to download data. Please try again.");
+                }
+            }
+
+            async function clearUserData() {
+                if (
+                    !confirm(
+                        "Are you sure you want to clear all your data? This action cannot be undone.",
+                    )
+                ) {
+                    return;
+                }
+
+                if (
+                    !confirm(
+                        "This will permanently delete all your journeys and reset your points. Are you absolutely sure?",
+                    )
+                ) {
+                    return;
+                }
+
+                try {
+                    const user = getCurrentUser();
+                    if (!user) return;
+
+                    const clearBtn = document.getElementById("clearDataBtn");
+                    clearBtn.disabled = true;
+                    clearBtn.textContent = "Clearing Data...";
+
+                    // Delete all journeys
+                    const batch = db.batch();
+                    allJourneys.forEach((journey) => {
+                        const journeyRef = db
+                            .collection("journeys")
+                            .doc(journey.id);
+                        batch.delete(journeyRef);
+                    });
+
+                    // Reset user stats
+                    const userRef = db.collection("users").doc(user.uid);
+                    batch.update(userRef, {
+                        points: 0,
+                        totalDistance: 0,
+                        roadTaxSaved: 0,
+                    });
+
+                    await batch.commit();
+
+                    alert("All data has been cleared successfully.");
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Error clearing data:", error);
+                    alert("Failed to clear data. Please try again.");
+
+                    const clearBtn = document.getElementById("clearDataBtn");
+                    clearBtn.disabled = false;
+                    clearBtn.textContent = "🗑️ Clear All Data";
+                }
+            }
+
+            function showError(message) {
+                const errorDiv = document.createElement("div");
+                errorDiv.style.cssText =
+                    "position: fixed; top: 20px; right: 20px; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; z-index: 1000; max-width: 300px;";
+                errorDiv.textContent = message;
+                document.body.appendChild(errorDiv);
+
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 5000);
+            }
+        </script>
+    </body>
+</html>
